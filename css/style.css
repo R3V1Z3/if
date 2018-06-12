@@ -1,0 +1,210 @@
+@font-face{
+  font-family: 'Fira Code iScript';
+  src: url('https://cdn.rawgit.com/kencrocken/FiraCodeiScript/master/FiraCodeiScript-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face{
+  font-family: 'Fira Code iScript';
+  src: url('https://cdn.rawgit.com/kencrocken/FiraCodeiScript/master/FiraCodeiScript-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+@import url(https://cdn.rawgit.com/tonsky/FiraCode/1.205/distr/fira_code.css);
+@import url('https://fonts.googleapis.com/css?effect=anaglyph|brick-sign');
+
+:root {
+  --bg: cornsilk;
+  --fontsize: 100%;
+  --width: 100em;
+  --scale: 1.0;
+  --perspective: 1500px;
+  --rotateX: 0deg;
+  --rotateY: 0deg;
+  --rotateZ: 0deg;
+  --translateZ: 0px;
+  --translateX: 0px;
+  --translateY: 0px;
+}
+
+#custom #parchment {
+  width: initial !important;
+}
+
+* {
+  font-family: 'Fira Code iScript', monospace;
+  transition: none;
+  animation: none;
+}
+
+body, html, #wrapper {
+  position: absolute;
+  overflow: hidden !important;
+  height: 100%;
+  width: 100%;
+}
+
+.inner {
+  transform:
+    scale(var(--scale))
+    perspective(var(--perspective))
+    rotateX(var(--rotateX))
+    rotateY(var(--rotateY))
+    rotateZ(var(--rotateZ))
+    translateZ(var(--translateZ))
+    translateX(var(--translateX))
+    translateY(var(--translateY));
+  transform-origin: center;
+  perspective-origin: center;
+  margin: auto;
+  padding: 2em;
+  touch-action: none;
+  transition: none;
+  animation: none;
+  background-color: var(--bg);
+  font-size: var(--fontsize);
+}
+
+pre.hljs {
+  background: none;
+}
+
+.fx {
+  background: darkslategray;
+}
+
+.fx .vignette {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0) 0%,rgba(0,0,0,0.5) 100%);
+}
+
+#custom .section {
+  width: var(--width);
+  overflow: hidden;
+  margin: auto;
+  border-width: 1em;
+  border-style: solid;
+  border-color: rgba(0,0,0,0);
+}
+
+#custom .section .content {
+  display: block;
+  height: 25em;
+  overflow-y: scroll;
+}
+
+.section:hover {
+  border-color: rgba(0,0,0,0.1);
+}
+
+/* tiltshift styles */
+
+.code.tiltshift-elegant {
+  -webkit-mask-box-image: linear-gradient(transparent 0%, black 30%, black 50%, black 70%, transparent 100%);
+}
+
+.code-overlay.tiltshift-elegant {
+  display: block;
+  filter: blur(2px);
+  -webkit-mask-box-image: linear-gradient(black 0%, transparent 50%, black 100%);
+}
+
+.code.tiltshift-extreme {
+  -webkit-mask-box-image: linear-gradient(transparent 0%, black 50%, transparent 100%);
+}
+
+.code-overlay.tiltshift-extreme {
+  display: block;
+  filter: blur(4px);
+  -webkit-mask-box-image: linear-gradient(black 0%, transparent 40%, black 100%);
+}
+
+.code-overlay {
+  display: none;
+  position: absolute;
+  top: -1em;
+  left: 0;
+  background: none;
+  pointer-events: none;
+}
+
+/* Info panel */
+.info {
+  color: gray;
+}
+
+.info h2 {
+  margin: 0;
+  text-transform: uppercase;
+  font-size: 1.75em;
+}
+
+.info .field.select {
+  margin: 0.5em 0;
+}
+
+.info .field.select::before {
+  content: "";
+  display: none;
+}
+
+.info .field.select::after {
+  pointer-events: none;
+  content: attr(data-name);
+  position: absolute;
+  right: 0;
+  color: rgba(255,255,255,0.5);
+  margin: 5px;
+  padding-right: 24px;
+}
+
+#custom .info li::before {
+  content: unset;
+}
+
+.info .field.collapsible.presets li {
+  margin-bottom: 0.75em;
+}
+
+.info .field.collapsible.presets .contents {
+  max-height: 200px;
+  overflow-y: scroll;
+}
+
+/* SLIDERS */
+
+#custom .sliders * {
+  color: white;
+}
+
+#custom .sliders {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  background: black;
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  color: white;
+  width: 300px;
+  border-radius: 10px;
+  z-index: 200;
+}
+
+#titlebar h3 {
+  padding: 0;
+  margin: 0;
+  padding-bottom: 8px;
+  text-align: center;
+  cursor: pointer;
+}
+
+div#svg {
+  display: none;
+}
