@@ -23,16 +23,14 @@ function done() {
     svg_filter = gd.get_param('svg-filter');
     extract_svg('filters.svg');
 
-    // // wrap .inner with an fx div
-    // if ( $('.fx').length === 0 ) {
-    //     $(eid_inner).wrap('<div class="fx">');
-    //     $('.fx').append('<div class="vignette"></div>');
-    // }
+    // wrap .inner with an fx div
+    if ( $('.fx').length === 0 ) {
+        $(eid_inner).wrap('<div class="fx">');
+        $('.fx').append('<div class="vignette"></div>');
+    }
     
-    // var v = $('.info .field.slider.vignette input').val();
-    // vignette(v);
-
-    // var h = $('.info .field.select.highlight select').change();
+    var v = $('.info .field.slider.vignette input').val();
+    vignette(v);
     
     // var css = gd.get_setting('style');
     // var f = $( ' .info .field.font select' ).val();
@@ -40,10 +38,10 @@ function done() {
 
     // register_events();
 
-    // var x = $('.info .slider.offsetX input').val();
-    // var y = $('.info .slider.offsetY input').val();
-    // $(eid_inner).attr( 'data-x' , x );
-    // $(eid_inner).attr( 'data-y' , y );
+    var x = $('.info .slider.offsetX input').val();
+    var y = $('.info .slider.offsetY input').val();
+    $(eid_inner).attr( 'data-x' , x );
+    $(eid_inner).attr( 'data-y' , y );
 
     // // include message for firefox users re: fx layer
     // if( navigator.userAgent.toLowerCase().indexOf('firefox') !== -1 ){
@@ -66,6 +64,7 @@ function done() {
     let story = gd.settings.get_value('story');
     run(story);
     register_events();
+    center_view();
 }
 
 function run(story) {
@@ -213,6 +212,42 @@ function toggle_class(type) {
     }
 }
 
+// center view by updating translatex and translatey
+function center_view() {
+    // center viewport
+    const e = document.querySelector( gd.eid );
+    const section = document.querySelector( gd.eid + ' .section');
+    let w = section.offsetWidth;
+    let h = section.offsetHeight;
+    let x = section.offsetLeft;
+    let y = section.offsetTop;
+
+    if ( e !== null ) {
+        //w = e.offsetWidth;
+        const maxwidth = window.innerWidth;
+        const maxheight = window.innerHeight;
+
+        // calculate translateX and translateY based on offsets
+        const offsetX = parseInt($('.info .field.slider.offsetX input').val());
+        const offsetY = parseInt($('.info .field.slider.offsetY input').val());
+
+        // it is not centered in the middle of .section
+        let translateX = -(x - (maxwidth / 2) + w / 2);
+        let translateY = -(y - (maxheight / 2 ) + h / 2);
+
+        translateX += offsetX;
+        translateY += offsetY;
+
+        let tx = document.querySelector('.info .slider.hid-translateX input');
+        let ty = document.querySelector('.info .slider.hid-translateY input');
+
+        if ( tx === null ) return;
+        if ( ty === null ) return;
+        gd.update_field(tx, translateX);
+        gd.update_field(ty, translateY);
+    }
+}
+
 function register_events() {
 
     // hack to ensure parchment scrolls to bottom after commands
@@ -222,13 +257,13 @@ function register_events() {
             el.scrollTop = el.scrollHeight;
             el = document.querySelector('.TextInput');
             el.focus();
+            // ensure view stays centered
+            center_view();
         };
     });
 
     window.addEventListener('resize', function(event){
-        // this fires multiple times during resize
-        // we'll render values each time as it looks better
-        render_values(true);
+        center_view();
     });
 
     // set font based on user selection
@@ -256,37 +291,41 @@ function register_events() {
     });
 
     // mousewheel zoom handler
-    $('.inner').on('wheel', function(e){
+    $(document).on('wheel', function(e){
         // disallow zoom within parchment content so user can safely scroll text
         let c = document.querySelector(gd.eid + ' .content');
+        if ( c.contains(e.target) ) return;
+        // disallow zoom within info panel as well
+        c = document.querySelector(gd.eid + ' .info');
         if ( c.contains(e.target) ) return;
         let translatez = document.querySelector('.info .slider.translateZ input');
         if ( translatez === null ) return;
         var v = Number( translatez.value );
         if( e.originalEvent.deltaY < 0 ) {
-            v += 5;
+            v += 10;
             if ( v > 500 ) v = 500;
         } else{
-            v -= 5;
+            v -= 10;
             if ( v < -500 ) v = -500;
         }
         gd.settings.set_value('translateZ', v);
-        gd.update_field(translatez, v)
+        gd.update_field(translatez, v);
+        center_view();
     });
 
-    // interact(eid_inner)
-    // .gesturable({
-    //     onmove: function (event) {
-    //         var $translatez = $('.info .slider.translatez input');
-    //         var scale = Number( $translatez.val() );
-    //         scale = scale * (1 + event.ds);
-    //         // update inner with new scale
-    //         update_slider_value( 'translateZ', scale );
-    //         $translatez.change();
-    //         dragMoveListener(event);
-    //     }
-    // })
-    // .draggable({ onmove: dragMoveListener });
+    interact(eid_inner)
+    .gesturable({
+        onmove: function (event) {
+            var $translatez = $('.info .slider.translatez input');
+            var scale = Number( $translatez.val() );
+            scale = scale * (1 + event.ds);
+            // update inner with new scale
+            update_slider_value( 'translateZ', scale );
+            $translatez.change();
+            dragMoveListener(event);
+        }
+    })
+    .draggable({ onmove: dragMoveListener });
 }
 
 function dragMoveListener (event) {
@@ -301,7 +340,7 @@ function dragMoveListener (event) {
         var $offsetY = $('.info .slider.offsetY input');
         $offsetX.change();
         $offsetY.change();
-        render_values(true);
+        center_view();
     } else {
         // update_slider_value( 'offsetX', x );
         // update_slider_value( 'offsetY', y );

@@ -10,7 +10,7 @@ _Interactive Fiction_
 -----
 
 Stories <!-- {$gd_selector_story} -->
-- None
+- [IF](stories/IF.gblorb)
 - [Sorcerer](https://cdn.rawgit.com/darrenaustin/zcode/9e431fcb/games/Sorcerer.z3)
 - [Enchanter](https://cdn.rawgit.com/darrenaustin/zcode/9e431fcb/games/Enchanter.z3)
 - [A Mind Forever Voyaging](https://cdn.rawgit.com/darrenaustin/zcode/9e431fcb/games/A%20Mind%20Forever%20Voyaging.z4)
@@ -78,7 +78,66 @@ Font Effect<!-- {$gd_select_font-effect} -->
 
 <!-- {$gd_collapsible_end_theme} -->
 
+<!-- {$gd_collapsible_effects} -->
+
+<!-- {$gd_select_tiltshift} -->
+- None
+- *Elegant
+- Extreme
+
 <!-- {$gd_select_svg-filter} -->
 - *None
+
+-----
+
+<!-- {$gd_slider_vignette="0.5,0,1,0.025"} -->
+
+<!-- {$gd_slider_brightness="1,0,3,0.05"} -->
+
+<!-- {$gd_slider_contrast="100,0,300,1,%"} -->
+
+<!-- {$gd_slider_grayscale="0,0,100,1,%"} -->
+
+<!-- {$gd_slider_hue-rotate="0,0,360,1,deg"} -->
+
+<!-- {$gd_slider_invert="0,0,100,1,%"} -->
+
+<!-- {$gd_slider_saturate="100,0,300,1,%"} -->
+
+<!-- {$gd_slider_sepia="0,0,100,1,%"} -->
+
+<!-- {$gd_slider_blur="0,0,20,1,px"} -->
+
+<!-- {$gd_collapsible_end_effects} -->
+
+<!-- {$gd_collapsible_perspective} -->
+
+<!-- {$gd_slider_scale="1,0.1,6,0.01"} -->
+
+<!-- {$gd_slider_perspective="1500,0,2000,1,px"} -->
+
+<!-- {$gd_slider_rotateX="0,0,360,1,deg"} -->
+
+<!-- {$gd_slider_rotateY="0,0,360,1,deg"} -->
+
+<!-- {$gd_slider_scaleZ="0,1,5,0.1"} -->
+
+<!-- {$gd_slider_rotateZ="0,0,360,1,deg"} -->
+
+<!-- {$gd_slider_translateZ="0,-500,500,1,px"} -->
+
+<!-- {$gd_collapsible_end_perspective} -->
+
+<!-- {$gd_collapsible_dimensions} -->
+
+<!-- {$gd_slider_width="0,60,1000,1,em"} -->
+
+<!-- {$gd_slider_padding="0,0,100,1,em"} -->
+
+<!-- {$gd_slider_offsetX="0,-4000,4000,1,px"} -->
+
+<!-- {$gd_slider_offsetY="0,-4000,4000,1,px"} -->
+
+<!-- {$gd_collapsible_end_dimensions} -->
 
 <!-- {$gd_hide} -->

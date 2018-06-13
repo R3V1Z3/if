@@ -16,19 +16,44 @@
 :root {
   --bg: cornsilk;
   --fontsize: 100%;
-  --width: 100em;
+
+  --width: 60em;
+  --padding: 0em;
+
   --scale: 1.0;
   --perspective: 1500px;
   --rotateX: 0deg;
   --rotateY: 0deg;
   --rotateZ: 0deg;
   --translateZ: 0px;
-  --translateX: 0px;
-  --translateY: 0px;
+  --hid-translateX: 0px;
+  --hid-translateY: 0px;
+
+  --brightness: 1;
+  --contrast: 100%;
+  --grayscale: 0%;
+  --hue-rotate: 0deg;
+  --invert: 0%;
+  --saturate: 0%;
+  --sepia: 0%;
+  --blur: 0px;
+}
 }
 
 #custom #parchment {
   width: initial !important;
+}
+
+#custom .info input {
+  display: inline;
+}
+
+.info .dialog {
+  width: initial;
+}
+
+#custom .info {
+  text-align: initial;
 }
 
 * {
@@ -52,17 +77,18 @@ body, html, #wrapper {
     rotateY(var(--rotateY))
     rotateZ(var(--rotateZ))
     translateZ(var(--translateZ))
-    translateX(var(--translateX))
-    translateY(var(--translateY));
+    translateX(var(--hid-translateX))
+    translateY(var(--hid-translateY));
   transform-origin: center;
   perspective-origin: center;
   margin: auto;
-  padding: 2em;
+  padding: 60%;
   touch-action: none;
   transition: none;
   animation: none;
   background-color: var(--bg);
   font-size: var(--fontsize);
+  display: table;
 }
 
 pre.hljs {
@@ -71,6 +97,15 @@ pre.hljs {
 
 .fx {
   background: darkslategray;
+  filter:
+    brightness(var(--brightness))
+    contrast(var(--contrast))
+    grayscale(var(--grayscale))
+    hue-rotate(var(--hue-rotate))
+    invert(var(--invert))
+    saturate(var(--saturate))
+    sepia(var(--sepia))
+    blur(var(--blur));
 }
 
 .fx .vignette {
@@ -86,7 +121,9 @@ pre.hljs {
 }
 
 #custom .section {
-  width: var(--width);
+  display: table;
+  height: 25em;
+  padding: var(--padding);
   overflow: hidden;
   margin: auto;
   border-width: 1em;
@@ -95,9 +132,11 @@ pre.hljs {
 }
 
 #custom .section .content {
+  width: var(--width);
   display: block;
   height: 25em;
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .section:hover {
