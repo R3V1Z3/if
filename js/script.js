@@ -36,34 +36,23 @@ function done() {
     // var f = $( ' .info .field.font select' ).val();
     // update_font(f);
 
-    // register_events();
+    register_events();
 
     var x = $('.info .slider.offsetX input').val();
     var y = $('.info .slider.offsetY input').val();
     $(eid_inner).attr( 'data-x' , x );
     $(eid_inner).attr( 'data-y' , y );
 
-    // // include message for firefox users re: fx layer
-    // if( navigator.userAgent.toLowerCase().indexOf('firefox') !== -1 ){
-    //     var fx_fields = document.querySelector( '.info .field.collapsible.effects .contents' );
-    //     if ( fx_fields !== null ) {
-    //         var message = 'Sorry, effects are currently disabled in Firefox due to technical hurdles. ';
-    //         var link = '<a href="https://alternativeto.net/software/ungoogled-chromium/">Ungoogled Chromium</a>';
-    //         message += `Please consider using a safe and modern alternative such as ${link}.`;
-    //         fx_fields.innerHTML = message;
-    //     }
-    // }
-
     // // everything loaded, now calculate url params
-    // gd.update_from_params();
     // render_values(true);
     // toggle_class('tiltshift');
     // toggle_class('font-effect');
 
     // load and run selected story
     let story = gd.settings.get_value('story');
+    console.log(story);
     run(story);
-    register_events();
+    gd.update_from_params();
     center_view();
 }
 
@@ -131,8 +120,8 @@ function update_slider_value( name, value ) {
     slider.setAttribute( 'value', value );
 }
 
-// t = true when rendering transforms
-// handle vignette and svg-filter
+// svg handler
+// 
 function render_values(t) {
     // var f = '';
     // var v = 'effects';

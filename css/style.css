@@ -15,19 +15,11 @@
 
 :root {
   --bg: cornsilk;
+  --color: black;
   --fontsize: 100%;
 
   --width: 60em;
   --padding: 0em;
-
-  --scale: 1.0;
-  --perspective: 1500px;
-  --rotateX: 0deg;
-  --rotateY: 0deg;
-  --rotateZ: 0deg;
-  --translateZ: 0px;
-  --hid-translateX: 0px;
-  --hid-translateY: 0px;
 
   --brightness: 1;
   --contrast: 100%;
@@ -37,7 +29,29 @@
   --saturate: 0%;
   --sepia: 0%;
   --blur: 0px;
+
+  --scale: 1.0;
+  --perspective: 1500px;
+  --rotateX: 0deg;
+  --rotateY: 0deg;
+  --rotateZ: 0deg;
+  --translateZ: 0px;
+  --hid-translateX: 0px;
+  --hid-translateY: 0px;
 }
+
+.inner {
+  transform:
+    scale(var(--scale))
+    perspective(var(--perspective))
+    rotateX(var(--rotateX))
+    rotateY(var(--rotateY))
+    rotateZ(var(--rotateZ))
+    translateZ(var(--translateZ))
+    translateX(var(--hid-translateX))
+    translateY(var(--hid-translateY));
+  transform-origin: center;
+  perspective-origin: center;
 }
 
 #custom #parchment {
@@ -70,17 +84,6 @@ body, html, #wrapper {
 }
 
 .inner {
-  transform:
-    scale(var(--scale))
-    perspective(var(--perspective))
-    rotateX(var(--rotateX))
-    rotateY(var(--rotateY))
-    rotateZ(var(--rotateZ))
-    translateZ(var(--translateZ))
-    translateX(var(--hid-translateX))
-    translateY(var(--hid-translateY));
-  transform-origin: center;
-  perspective-origin: center;
   margin: auto;
   padding: 60%;
   touch-action: none;
@@ -126,21 +129,15 @@ pre.hljs {
   padding: var(--padding);
   overflow: hidden;
   margin: auto;
-  border-width: 1em;
-  border-style: solid;
-  border-color: rgba(0,0,0,0);
 }
 
 #custom .section .content {
   width: var(--width);
+  color: var(--color);
   display: block;
   height: 25em;
   overflow-y: scroll;
   overflow-x: hidden;
-}
-
-.section:hover {
-  border-color: rgba(0,0,0,0.1);
 }
 
 /* tiltshift styles */
