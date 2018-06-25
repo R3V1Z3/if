@@ -1,21 +1,22 @@
 @font-face{
   font-family: 'Fira Code iScript';
-  src: url('https://cdn.rawgit.com/kencrocken/FiraCodeiScript/master/FiraCodeiScript-Regular.ttf') format('truetype');
+  src: url('//cdn.rawgit.com/kencrocken/FiraCodeiScript/master/FiraCodeiScript-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
 }
 @font-face{
   font-family: 'Fira Code iScript';
-  src: url('https://cdn.rawgit.com/kencrocken/FiraCodeiScript/master/FiraCodeiScript-Italic.ttf') format('truetype');
+  src: url('//cdn.rawgit.com/kencrocken/FiraCodeiScript/master/FiraCodeiScript-Italic.ttf') format('truetype');
   font-weight: 400;
   font-style: italic;
 }
-@import url(https://cdn.rawgit.com/tonsky/FiraCode/1.205/distr/fira_code.css);
-@import url('https://fonts.googleapis.com/css?effect=anaglyph|brick-sign');
+@import url('//cdn.rawgit.com/tonsky/FiraCode/1.205/distr/fira_code.css');
+@import url('//fonts.googleapis.com/css?effect=anaglyph|brick-sign');
 
 :root {
   --bg: cornsilk;
   --color: black;
+  --font: 'Fira Code iScript', monospace;
   --fontsize: 100%;
 
   --width: 60em;
@@ -40,6 +41,21 @@
   --hid-translateY: 0px;
 }
 
+#custom .section .content {
+  width: var(--width);
+  color: var(--color);
+  display: block;
+  height: 25em;
+  max-height: 25em;
+  overflow-y: scroll;
+}
+
+#custom .section {
+  display: table;
+  padding: var(--padding);
+  margin: auto;
+}
+
 .inner {
   transform:
     scale(var(--scale))
@@ -53,6 +69,12 @@
   transform-origin: center;
   perspective-origin: center;
 }
+
+.inner .section * {
+  font-family: var(--font);
+}
+
+/* Parchment related styles */
 
 #custom #parchment {
   width: initial !important;
@@ -76,14 +98,21 @@
   animation: none;
 }
 
+body, html, #wrapper, .inner {
+  overflow: hidden !important;
+}
+
 body, html, #wrapper {
   position: absolute;
-  overflow: hidden !important;
+  overflow: hidden;
   height: 100%;
   width: 100%;
 }
 
 .inner {
+  display: table;
+  transform-origin: center;
+  perspective-origin: center;
   margin: auto;
   padding: 60%;
   touch-action: none;
@@ -91,7 +120,6 @@ body, html, #wrapper {
   animation: none;
   background-color: var(--bg);
   font-size: var(--fontsize);
-  display: table;
 }
 
 pre.hljs {
@@ -111,6 +139,10 @@ pre.hljs {
     blur(var(--blur));
 }
 
+.fx.svg {
+  filter: url(#f006);
+}
+
 .fx .vignette {
   pointer-events: none;
   position: fixed;
@@ -121,23 +153,6 @@ pre.hljs {
   height: 100%;
   width: 100%;
   background: radial-gradient(ellipse at center, rgba(0,0,0,0) 0%,rgba(0,0,0,0.5) 100%);
-}
-
-#custom .section {
-  display: table;
-  height: 25em;
-  padding: var(--padding);
-  overflow: hidden;
-  margin: auto;
-}
-
-#custom .section .content {
-  width: var(--width);
-  color: var(--color);
-  display: block;
-  height: 25em;
-  overflow-y: scroll;
-  overflow-x: hidden;
 }
 
 /* tiltshift styles */

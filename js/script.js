@@ -3,7 +3,7 @@ var eid_inner = '.inner';
 var svg_filter;
 
 const gd = new GitDown('#wrapper', {
-    title: 'IF',
+    title: 'Code Glory',
     content: 'README.md',
     markdownit: 'false',
     merge_gists: false,
@@ -15,44 +15,52 @@ var timeout;
 
 function done() {
 
-    // remove any existing svg ids
-    $('#svg').remove();
-    $('.info .toc-heading').remove();
-    $('.info .toc').remove();
+    if ( !gd.status.has('theme-changed') ) {
+        // remove any existing svg ids
+        $('#svg').remove();
+        $('.info .toc-heading').remove();
+        $('.info .toc').remove();
 
-    svg_filter = gd.get_param('svg-filter');
-    extract_svg('filters.svg');
+        svg_filter = gd.get_param('svg-filter');
+        extract_svg('filters.svg');
 
-    // wrap .inner with an fx div
-    if ( $('.fx').length === 0 ) {
-        $(eid_inner).wrap('<div class="fx">');
-        $('.fx').append('<div class="vignette"></div>');
+        // wrap .inner with an fx div
+        if ( $('.fx').length === 0 ) {
+            $(eid_inner).wrap('<div class="fx">');
+            $('.fx').append('<div class="vignette"></div>');
+        }
+        
+        var v = $('.info .field.slider.vignette input').val();
+        vignette(v);
+
+        var h = $('.info .field.select.highlight select').change();
+
+        var x = $('.info .slider.offsetX input').val();
+        var y = $('.info .slider.offsetY input').val();
+        $(eid_inner).attr( 'data-x' , x );
+        $(eid_inner).attr( 'data-y' , y );
+
+        //$('.code-overlay').show();
+
+        update_class('tiltshift');
+        update_class('font-effect');
+        register_events();
     }
-    
-    var v = $('.info .field.slider.vignette input').val();
-    vignette(v);
-    
-    // var css = gd.get_setting('style');
-    // var f = $( ' .info .field.font select' ).val();
-    // update_font(f);
 
-    register_events();
-
-    var x = $('.info .slider.offsetX input').val();
-    var y = $('.info .slider.offsetY input').val();
-    $(eid_inner).attr( 'data-x' , x );
-    $(eid_inner).attr( 'data-y' , y );
-
-    // // everything loaded, now calculate url params
-    // render_values(true);
-    // toggle_class('tiltshift');
-    // toggle_class('font-effect');
+    if ( gd.status.has('theme-changed') ) {
+        // first update fields based on cssvar defaults
+        gd.update_from_params();
+    }
 
     // load and run selected story
-    let story = gd.settings.get_value('story');
-    console.log(story);
-    run(story);
-    gd.update_from_params();
+    const parchment = document.querySelector('#parchment');
+    const story = gd.settings.get_value('story');
+    if ( parchment === null || gd.status.has('story-changed') ) {
+        run(story);
+        // PROBLEM: update_from_params sets values so drag operation works
+        // but it screws up story loading (story url param doesn't work).
+    }
+
     center_view();
 }
 
@@ -62,10 +70,10 @@ function run(story) {
     $('#parchment').remove();
     $('#inform').remove();
     let parchment = `<div id="parchment"
-    aria-live="polite"
-    aria-atomic="false"
-    aria-relevant="additions">
-    </div>`;
+        aria-live="polite"
+        aria-atomic="false"
+        aria-relevant="additions">
+        </div>`;
     $('.section .content').append(parchment);
 
     head = document.getElementsByTagName('head')[0];
@@ -103,6 +111,7 @@ function extract_svg(filename) {
             $('#svg defs filter').each(function() {
                 var id = $(this).attr('id');
                 var name = $(this).attr('inkscape:label');
+                //$select.append(`<option>${name}-${id}</option>`);
                 $select.append(`<option>${name}-${id}</option>`);
             });
         }
@@ -115,90 +124,9 @@ function extract_svg(filename) {
 }
 
 function update_slider_value( name, value ) {
-    let slider = document.querySelector( `.info .slider.${name} input` );
+    var slider = document.querySelector( `.info .slider.${name} input` );
     slider.value = value;
     slider.setAttribute( 'value', value );
-}
-
-// svg handler
-// 
-function render_values(t) {
-    // var f = '';
-    // var v = 'effects';
-    // if (t) v = 'perspective';
-    // $fields = $(`.info .collapsible.${v} .field.slider`);
-    // $fields.each(function(){
-    //     var $i = $(this).find('input');
-    //     var name = $i.attr('name');
-    //     var value = $i.val();
-    //     var suffix = $i.attr('data-suffix');
-    //     if ( suffix === undefined ) suffix = '';
-    //     // add values of tranform sliders to f
-    //     if ( name != 'vignette' ) {
-    //         f += `${name}(${value}${suffix}) `;
-    //     }
-    // });
-    // if (!t) {
-    //     var svg = $('.info .field.select.svg-filter select').val();
-    //     var x = '';
-    //     if ( svg === 'none' || svg === null ) {
-    //     } else {
-    //         var splt = svg.split('-');
-    //         svg = splt[splt.length - 1];
-    //         f += `url("#${svg}")`;
-    //     }
-    // }
-}
-
-function update_font(f) {
-    // remove any existing font link
-    $('#gd-font').remove();
-    if ( f === undefined || f === null ) f = 'default';
-    if ( f.toLowerCase() !== 'default' ) {
-        f = f.replace( /\-/g, '+' );
-        // capitalize words
-        f = f.replace( /\b\w/g, l => l.toUpperCase() );
-        f = f.replace( 'Iscript', 'iScript' );
-        f = f.replace( 'Ibm', 'IBM' );
-        f = f.replace( 'Pt+Mono', 'PT+Mono' );
-        f = f.replace( 'Vt323', 'VT323' );
-        if ( f === "Fira+Code+iScript") {
-            // 'Fira Code iScript'
-        } else if ( f === "Fira+Code") {
-            //
-        } else {
-            load_gfont(f);
-        }
-        // now lets add the font to the section elements
-        f = f.replace( /\+/g, ' ' );
-        $('.inner .section *').css({ fontFamily : f });
-    }
-}
-
-function load_gfont(f) {
-    const href = '//fonts.googleapis.com/css?family=' + f;
-    // create link
-    const link = `<link id="gd-font" rel="stylesheet" href="${href}">`;
-    $('head').append(link);
-}
-
-function remove_class_by_prefix( element, prefix ) {
-    const el = document.querySelector(element);
-    if ( el === null ) return;
-    var classes = el.classList;
-    for( var c of classes ) {
-        if ( c.startsWith(prefix) ) el.classList.remove(c);
-    }
-}
-
-function toggle_class(type) {
-    var v = $(`.info .field.select.${type} select`).val().toLowerCase();
-    // remove existing classes first
-    remove_class_by_prefix( '#parchment', type );
-    
-    if ( v !== 'none' || v !== null ) {
-        $('#parchment').addClass(`${type}-${v}`);
-    }
 }
 
 // center view by updating translatex and translatey
@@ -230,14 +158,40 @@ function center_view() {
         let tx = document.querySelector('.info .slider.hid-translateX input');
         let ty = document.querySelector('.info .slider.hid-translateY input');
 
-        if ( tx === null ) return;
-        if ( ty === null ) return;
+        if ( tx === null || ty === null) return;
+
+        // PROBLEM: this doubling of calls likely renders the ui change twice
+        // TODO: combine what's needed from update_field() and write the function here
         gd.update_field(tx, translateX);
         gd.update_field(ty, translateY);
     }
 }
 
+function remove_class_by_prefix( element, prefix ) {
+    const el = document.querySelector(element);
+    if ( el === null ) return;
+    var classes = el.classList;
+    for( var c of classes ) {
+        if ( c.startsWith(prefix) ) el.classList.remove(c);
+    }
+}
+
+function update_class(type) {
+    var v = $(`.info .field.select.${type} select`).val().toLowerCase();
+    // remove existing classes first
+    // remove_class_by_prefix( gd.eid + ' .code', type );
+    // remove_class_by_prefix( gd.eid + ' .code-overlay', type );
+    // if ( v !== 'none' || v !== null ) {
+    //     $('.code').addClass(`${type}-${v}`);
+    //     $('.code-overlay').addClass(`${type}-${v}`);
+    // }
+}
+
 function register_events() {
+
+    window.addEventListener('resize', function(event){
+        center_view();
+    });
 
     // hack to ensure parchment scrolls to bottom after commands
     $(document).on('keyup', function(e) {
@@ -251,42 +205,46 @@ function register_events() {
         };
     });
 
-    window.addEventListener('resize', function(event){
-        center_view();
-    });
-
-    // set font based on user selection
-    $( ' .info .field.font select' ).change(function() {
-        var font = $(this).val();
-        update_font(font);
-    });
-
     // vignette effect
     $('.info .field.slider.vignette input').on('input change', function(e) {
         var v = $(this).val();
         vignette(v);
     });
 
-    $('.info .field.select.svg-filter select').change(function() {
-        render_values(false);
+    $('.info .field.select.svg-filter select').change(e => {
+        let fx = document.querySelector('.fx');
+        if ( fx === null ) return;
+
+        let style = `
+            brightness(var(--brightness))
+            contrast(var(--contrast))
+            grayscale(var(--grayscale))
+            hue-rotate(var(--hue-rotate))
+            invert(var(--invert))
+            saturate(var(--saturate))
+            sepia(var(--sepia))
+            blur(var(--blur))
+        `;
+
+        let svg = e.target.value;
+        let url = '';
+        svg = svg.split('-');
+        if ( svg.length > 1 ) url = ` url(#${svg[1].trim()})`;
+        style += url;
+        fx.style.filter = style;
     });
 
     $('.info .field.select.tiltshift select').change(function() {
-        toggle_class('tiltshift');
+        update_class('tiltshift');
     });
 
     $('.info .field.select.font-effect select').change(function() {
-        toggle_class('font-effect');
+        update_class('font-effect');
     });
 
     // mousewheel zoom handler
-    $(document).on('wheel', function(e){
+    $('.inner').on('wheel', function(e){
         // disallow zoom within parchment content so user can safely scroll text
-        let c = document.querySelector(gd.eid + ' .content');
-        if ( c.contains(e.target) ) return;
-        // disallow zoom within info panel as well
-        c = document.querySelector(gd.eid + ' .info');
-        if ( c.contains(e.target) ) return;
         let translatez = document.querySelector('.info .slider.translateZ input');
         if ( translatez === null ) return;
         var v = Number( translatez.value );
