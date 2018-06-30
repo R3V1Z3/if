@@ -102,6 +102,10 @@ body, html, #wrapper, .inner {
   overflow: hidden !important;
 }
 
+#custom body {
+  margin: 0px 0px 0px 0px !important;
+}
+
 body, html, #wrapper {
   position: absolute;
   overflow: hidden;

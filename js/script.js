@@ -3,15 +3,16 @@ var eid_inner = '.inner';
 var svg_filter;
 
 const gd = new GitDown('#wrapper', {
-    title: 'Code Glory',
+    title: 'IF',
     content: 'README.md',
     markdownit: 'false',
     merge_gists: false,
     callback: done
 });
 
-var eid = gd.eid;
-var timeout;
+let eid = gd.eid;
+let timeout;
+let events_registered = false;
 
 function done() {
 
@@ -44,7 +45,6 @@ function done() {
 
         update_class('tiltshift');
         update_class('font-effect');
-        register_events();
     }
 
     if ( gd.status.has('theme-changed') ) {
@@ -61,6 +61,7 @@ function done() {
         // but it screws up story loading (story url param doesn't work).
     }
 
+    if (!events_registered) register_events();
     center_view();
 }
 
@@ -189,6 +190,8 @@ function update_class(type) {
 
 function register_events() {
 
+    if(!events_registered) events_registered = true;
+
     window.addEventListener('resize', function(event){
         center_view();
     });
@@ -200,6 +203,8 @@ function register_events() {
             el.scrollTop = el.scrollHeight;
             el = document.querySelector('.TextInput');
             el.focus();
+            // weird margin fix since parchment keeps re-adding styles
+            $('body').css('margin: 0px;');
             // ensure view stays centered
             center_view();
         };
@@ -243,7 +248,9 @@ function register_events() {
     });
 
     // mousewheel zoom handler
-    $('.inner').on('wheel', function(e){
+    $('.inner').on('wheel', e => {
+        // do nothing if mouse is outside of .inner container
+        if( !e.target.classList.contains('inner') ) return;
         // disallow zoom within parchment content so user can safely scroll text
         let translatez = document.querySelector('.info .slider.translateZ input');
         if ( translatez === null ) return;
@@ -288,14 +295,6 @@ function dragMoveListener (event) {
         $offsetX.change();
         $offsetY.change();
         center_view();
-    } else {
-        // update_slider_value( 'offsetX', x );
-        // update_slider_value( 'offsetY', y );
-
-        // translate the element
-        // target.style.webkitTransform =
-        // target.style.transform =
-        //     'translate(' + x + 'px, ' + y + 'px)';
     }
     
     // update the position attributes
