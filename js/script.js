@@ -37,8 +37,8 @@ class IF extends BreakDown {
     }
 
     run(story) {
-        $('.content pre.code').remove();
-        $('.content pre.code-overlay').remove();
+        $('.content pre .code').html('');
+        $('.content pre .code-overlay').html('');
         $('#parchment').remove();
         $('#inform').remove();
         let parchment = `<div id="parchment"
@@ -46,7 +46,7 @@ class IF extends BreakDown {
             aria-atomic="false"
             aria-relevant="additions">
             </div>`;
-        $('.section .content').append(parchment);
+        $('.section .content pre').append(parchment);
 
         const head = document.getElementsByTagName('head')[0];
         const script = document.createElement('script');
